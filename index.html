@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedHive - Secure Medical Consultations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #fbbc05;
+            --danger: #ea4335;
+            --light: #f8f9fa;
+            --dark: #202124;
+            --gray: #5f6368;
+            --light-gray: #dadce0;
+            --border-radius: 8px;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .logo i {
+            color: var(--secondary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline:hover {
+            background: rgba(26, 115, 232, 0.1);
+        }
+
+        /* Page Sections */
+        .page {
+            display: none;
+            min-height: calc(100vh - 200px);
+            padding: 40px 0;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-light {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-light:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Features Section */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            background: rgba(26, 115, 232, 0.1);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon i {
+            font-size: 30px;
+            color: var(--primary);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+        }
+
+        /* Professional Cards */
+        .professionals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .professional-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .professional-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .professional-image {
+            height: 200px;
+            background-color: #e0e0e0;
+            position: relative;
+        }
+
+        .verified-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--secondary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .professional-info {
+            padding: 20px;
+        }
+
+        .professional-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .professional-specialty {
+            color: var(--gray);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .professional-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .stars {
+            color: var(--accent);
+        }
+
+        .professional-price {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .professional-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 13px;
+        }
+
+        /* Consultation Modes */
+        .consultation-modes {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .mode-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            width: 200px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .mode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .mode-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .mode-card p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Billing Calculator */
+        .billing-calculator {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .calculator-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 500;
+        }
+
+        .form-control {
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+        }
+
+        .calculator-result {
+            background: rgba(26, 115, 232, 0.1);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .result-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        /* Forms */
+        .auth-form, .booking-form {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--dark);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gray);
+        }
+
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            color: var(--gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: rgba(26, 115, 232, 0.1);
+            color: var(--primary);
+        }
+
+        .dashboard-content {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .dashboard-section {
+            display: none;
+        }
+
+        .dashboard-section.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(26, 115, 232, 0.1);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Booking Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: #bdc1c6;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #3c4043;
+            color: #9aa0a6;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section {
+                padding: 50px 0;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo" onclick="showPage('home')">
+                <i class="fas fa-clinic-medical"></i>
+                <span>MedHive</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" onclick="showPage('home')">Home</a></li>
+                    <li><a href="#" onclick="showPage('professionals')">Find Professionals</a></li>
+                    <li><a href="#" onclick="showPage('how-it-works')">How It Works</a></li>
+                    <li><a href="#" onclick="showPage('pricing')">Pricing</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <button class="btn btn-outline" onclick="showPage('login')">Log In</button>
+                <button class="btn btn-primary" onclick="showPage('signup')">Sign Up</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Home Page -->
+    <section id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Secure Medical Consultations Online</h1>
+                <p>Connect with verified healthcare professionals through video, voice, or chat consultations with transparent, time-based billing.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-light" onclick="showPage('professionals')">Find a Professional</button>
+                    <button class="btn btn-outline" style="color: white; border-color: white;" onclick="showPage('signup-professional')">Become a Provider</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Why Choose MedHive?</h2>
+                    <p>Our platform offers secure, certified medical consultations with transparent pricing</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h3>Verified Professionals</h3>
+                        <p>All healthcare providers are thoroughly vetted and certified with proper credentials.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Secure & Private</h3>
+                        <p>HIPAA-compliant platform with end-to-end encryption for all consultations and data.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Time-Based Billing</h3>
+                        <p>Pay only for the time you use with transparent per-minute pricing and no hidden fees.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>Multiple Consultation Modes</h3>
+                        <p>Choose from video calls, voice calls, or chat-based consultations based on your needs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Professionals Preview -->
+        <section class="section" style="background-color: white;">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Featured Medical Professionals</h2>
+                    <p>Browse our verified healthcare providers across various specialties</p>
+                </div>
+                <div class="professionals-grid">
+                    <!-- Professional 1 -->
+                    <div class="professional-card">
+                        <div class="professional-image">
+                            <div class="verified-badge">
+                                <i class="fas fa-check-circle"></i> Verified
+                            </div>
+                        </div>
+                        <div class="professional-info">
+                            <div class="professional-name">Dr. Sarah Johnson</div>
+                            <div class="professional-specialty">Cardiologist • 12 years experience</div>
+                            <div class="professional-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span>4.7 (128 reviews)</span>
+                            </div>
+                            <div class="professional-price">$3.20/min</div>
+                            <div class="professional-actions">
+                                <button class="btn btn-primary btn-small" onclick="openBookingModal('Dr. Sarah Johnson')">Book Now</button>
+                                <button class="btn btn-outline btn-small" onclick="showProfessionalProfile(1)">View Profile</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Professional 2 -->
+                    <div class="professional-card">
+                        <div class="professional-image">
+                            <div class="verified-badge">
+                                <i class="fas fa-check-circle"></i> Verified
+                            </div>
+                        </div>
+                        <div class="professional-info">
+                            <div class="professional-name">Dr. Michael Chen</div>
+                            <div class="professional-specialty">Psychiatrist • 8 years experience</div>
+                            <div class="professional-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span>5.0 (94 reviews)</span>
+                            </div>
+                            <div class="professional-price">$2.80/min</div>
+                            <div class="professional-actions">
+                                <button class="btn btn-primary btn-small" onclick="openBookingModal('Dr. Michael Chen')">Book Now</button>
+                                <button class="btn btn-outline btn-small" onclick="showProfessionalProfile(2)">View Profile</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Professional 3 -->
+                    <div class="professional-card">
+                        <div class="professional-image">
+                            <div class="verified-badge">
+                                <i class="fas fa-check-circle"></i> Verified
+                            </div>
+                        </div>
+                        <div class="professional-info">
+                            <div class="professional-name">Dr. Elena Rodriguez</div>
+                            <div class="professional-specialty">Pediatrician • 15 years experience</div>
+                            <div class="professional-rating">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <span>4.2 (203 reviews)</span>
+                            </div>
+                            <div class="professional-price">$2.50/min</div>
+                            <div class="professional-actions">
+                                <button class="btn btn-primary btn-small" onclick="openBookingModal('Dr. Elena Rodriguez')">Book Now</button>
+                                <button class="btn btn-outline btn-small" onclick="showProfessionalProfile(3)">View Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="btn btn-primary" onclick="showPage('professionals')">View All Professionals</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Consultation Modes -->
+        <section class="section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Consultation Options</h2>
+                    <p>Choose the consultation method that works best for you</p>
+                </div>
+                <div class="consultation-modes">
+                    <div class="mode-card">
+                        <div class="mode-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>Video Call</h3>
+                        <p>Face-to-face HD video consultations with healthcare providers</p>
+                    </div>
+                    <div class="mode-card">
+                        <div class="mode-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <h3>Voice Call</h3>
+                        <p>Audio-only consultations for convenience and privacy</p>
+                    </div>
+                    <div class="mode-card">
+                        <div class="mode-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>Live Chat</h3>
+                        <p>Real-time text-based consultations for quick questions</p>
+                    </div>
+                    <div class="mode-card">
+                        <div class="mode-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Messaging</h3>
+                        <p>Asynchronous Q&A for non-urgent medical inquiries</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Billing Calculator -->
+        <section class="section" style="background-color: white;">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Cost Calculator</h2>
+                    <p>Estimate your consultation costs with our transparent pricing model</p>
+                </div>
+                <div class="billing-calculator">
+                    <div class="calculator-form">
+                        <div class="form-group">
+                            <label for="consultation-type">Consultation Type</label>
+                            <select id="consultation-type" class="form-control">
+                                <option value="video">Video Call</option>
+                                <option value="voice">Voice Call</option>
+                                <option value="chat">Live Chat</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="duration">Estimated Duration (minutes)</label>
+                            <input type="range" id="duration" min="5" max="60" value="15" class="form-control">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>5 min</span>
+                                <span id="duration-value">15 min</span>
+                                <span>60 min</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="professional-type">Professional Level</label>
+                            <select id="professional-type" class="form-control">
+                                <option value="general">General Practitioner</option>
+                                <option value="specialist">Specialist</option>
+                                <option value="expert">Senior Expert</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="calculator-result">
+                        <div>Estimated Cost</div>
+                        <div class="result-value" id="calculated-cost">$24.00</div>
+                        <div>Based on average rates for selected options</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- Professionals Page -->
+    <section id="professionals" class="page">
+        <div class="container">
+            <div class="section-title">
+                <h2>Find Medical Professionals</h2>
+                <p>Browse and book consultations with our verified healthcare providers</p>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <div class="form-group" style="max-width: 400px;">
+                    <label for="search-professionals">Search Professionals</label>
+                    <input type="text" id="search-professionals" class="form-control" placeholder="Search by name, specialty, or condition">
+                </div>
+            </div>
+            
+            <div class="professionals-grid">
+                <!-- Professional listings will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Page -->
+    <section id="how-it-works" class="page">
+        <div class="container">
+            <div class="section-title">
+                <h2>How MedHive Works</h2>
+                <p>Simple steps to get the medical care you need</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>1. Find a Professional</h3>
+                    <p>Browse our directory of verified healthcare providers by specialty, rating, or availability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>2. Book a Session</h3>
+                    <p>Choose your preferred consultation type (video, voice, or chat) and schedule a time that works for you.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>3. Consult Securely</h3>
+                    <p>Connect with your healthcare provider through our secure, HIPAA-compliant platform.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <h3>4. Transparent Billing</h3>
+                    <p>Pay only for the time you use with our per-minute billing. No hidden fees or surprises.</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 50px;">
+                <button class="btn btn-primary" onclick="showPage('signup')">Get Started Today</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Page -->
+    <section id="pricing" class="page">
+        <div class="container">
+            <div class="section-title">
+                <h2>Transparent Pricing</h2>
+                <p>Pay only for the time you use with no hidden fees</p>
+            </div>
+            
+            <div class="billing-calculator">
+                <div class="calculator-form">
+                    <div class="form-group">
+                        <label for="pricing-consultation-type">Consultation Type</label>
+                        <select id="pricing-consultation-type" class="form-control">
+                            <option value="video">Video Call</option>
+                            <option value="voice">Voice Call</option>
+                            <option value="chat">Live Chat</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pricing-duration">Estimated Duration (minutes)</label>
+                        <input type="range" id="pricing-duration" min="5" max="60" value="15" class="form-control">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>5 min</span>
+                            <span id="pricing-duration-value">15 min</span>
+                            <span>60 min</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pricing-professional-type">Professional Level</label>
+                        <select id="pricing-professional-type" class="form-control">
+                            <option value="general">General Practitioner</option>
+                            <option value="specialist">Specialist</option>
+                            <option value="expert">Senior Expert</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="calculator-result">
+                    <div>Estimated Cost</div>
+                    <div class="result-value" id="pricing-calculated-cost">$24.00</div>
+                    <div>Based on average rates for selected options</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 50px;">
+                <h3 style="text-align: center; margin-bottom: 30px;">Pricing Tiers</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>General Practitioners</h3>
+                        <p style="font-size: 24px; font-weight: 700; color: var(--primary); margin: 15px 0;">$1.50 - $2.50/min</p>
+                        <p>Primary care physicians, family doctors, and general medical consultants</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Specialists</h3>
+                        <p style="font-size: 24px; font-weight: 700; color: var(--primary); margin: 15px 0;">$2.50 - $4.00/min</p>
+                        <p>Cardiologists, psychiatrists, dermatologists, and other medical specialists</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Senior Experts</h3>
+                        <p style="font-size: 24px; font-weight: 700; color: var(--primary); margin: 15px 0;">$4.00 - $6.00/min</p>
+                        <p>Highly experienced specialists with 15+ years of practice and exceptional ratings</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Page -->
+    <section id="login" class="page">
+        <div class="container">
+            <div class="auth-form">
+                <h2 class="form-title">Log In to MedHive</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Log In</button>
+                </form>
+                <div class="form-footer">
+                    <p>Don't have an account? <a href="#" onclick="showPage('signup')">Sign up here</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signup Page -->
+    <section id="signup" class="page">
+        <div class="container">
+            <div class="auth-form">
+                <h2 class="form-title">Create Your MedHive Account</h2>
+                <form id="signup-form">
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-account-type">I am a:</label>
+                        <select id="signup-account-type" class="form-control">
+                            <option value="patient">Patient</option>
+                            <option value="professional">Healthcare Professional</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Create Account</button>
+                </form>
+                <div class="form-footer">
+                    <p>Already have an account? <a href="#" onclick="showPage('login')">Log in here</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Professional Signup Page -->
+    <section id="signup-professional" class="page">
+        <div class="container">
+            <div class="auth-form">
+                <h2 class="form-title">Join as a Healthcare Professional</h2>
+                <form id="professional-signup-form">
+                    <div class="form-group">
+                        <label for="pro-name">Full Name</label>
+                        <input type="text" id="pro-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pro-email">Email Address</label>
+                        <input type="email" id="pro-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pro-specialty">Medical Specialty</label>
+                        <select id="pro-specialty" class="form-control" required>
+                            <option value="">Select your specialty</option>
+                            <option value="cardiology">Cardiology</option>
+                            <option value="psychiatry">Psychiatry</option>
+                            <option value="pediatrics">Pediatrics</option>
+                            <option value="dermatology">Dermatology</option>
+                            <option value="internal-medicine">Internal Medicine</option>
+                            <option value="neurology">Neurology</option>
+                            <option value="orthopedics">Orthopedics</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pro-license">Medical License Number</label>
+                        <input type="text" id="pro-license" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pro-experience">Years of Experience</label>
+                        <input type="number" id="pro-experience" class="form-control" min="1" max="50" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Apply to Join</button>
+                </form>
+                <div class="form-footer">
+                    <p>Already have an account? <a href="#" onclick="showPage('login')">Log in here</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Professional Profile Page -->
+    <section id="professional-profile" class="page">
+        <div class="container">
+            <div class="professional-card" style="max-width: 800px; margin: 0 auto;">
+                <div class="professional-image" style="height: 300px;">
+                    <div class="verified-badge">
+                        <i class="fas fa-check-circle"></i> Verified
+                    </div>
+                </div>
+                <div class="professional-info">
+                    <div class="professional-name" id="profile-name">Dr. Sarah Johnson</div>
+                    <div class="professional-specialty" id="profile-specialty">Cardiologist • 12 years experience</div>
+                    <div class="professional-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span id="profile-rating">4.7 (128 reviews)</span>
+                    </div>
+                    <div class="professional-price" id="profile-price">$3.20/min</div>
+                    
+                    <div style="margin: 20px 0;">
+                        <h3>About</h3>
+                        <p id="profile-about">Dr. Sarah Johnson is a board-certified cardiologist with over 12 years of experience in treating cardiovascular diseases. She specializes in preventive cardiology and heart failure management.</p>
+                    </div>
+                    
+                    <div style="margin: 20px 0;">
+                        <h3>Education & Certifications</h3>
+                        <ul id="profile-education" style="padding-left: 20px;">
+                            <li>MD, Harvard Medical School</li>
+                            <li>Board Certified in Cardiology</li>
+                            <li>Fellow of the American College of Cardiology</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="professional-actions" style="justify-content: center; margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="openBookingModal(document.getElementById('profile-name').textContent)">Book Consultation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Page -->
+    <section id="dashboard" class="page">
+        <div class="container">
+            <h2 style="margin-bottom: 30px;">My Dashboard</h2>
+            
+            <div class="dashboard">
+                <div class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li><a href="#" class="active" onclick="showDashboardSection('overview')"><i class="fas fa-chart-pie"></i> Overview</a></li>
+                        <li><a href="#" onclick="showDashboardSection('appointments')"><i class="fas fa-calendar-alt"></i> Appointments</a></li>
+                        <li><a href="#" onclick="showDashboardSection('medical-records')"><i class="fas fa-file-medical"></i> Medical Records</a></li>
+                        <li><a href="#" onclick="showDashboardSection('payments')"><i class="fas fa-credit-card"></i> Payments</a></li>
+                        <li><a href="#" onclick="showDashboardSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
+                    </ul>
+                </div>
+                
+                <div class="dashboard-content">
+                    <!-- Overview Section -->
+                    <div id="overview" class="dashboard-section active">
+                        <h3>Dashboard Overview</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <i class="fas fa-calendar-check" style="font-size: 24px; color: var(--primary);"></i>
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Upcoming Appointments</div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-file-medical-alt" style="font-size: 24px; color: var(--primary);"></i>
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Past Consultations</div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-dollar-sign" style="font-size: 24px; color: var(--primary);"></i>
+                                <div class="stat-value">$247</div>
+                                <div class="stat-label">Total Spent</div>
+                            </div>
+                        </div>
+                        
+                        <h4 style="margin: 30px 0 15px;">Recent Appointments</h4>
+                        <div class="professional-card">
+                            <div class="professional-info">
+                                <div class="professional-name">Dr. Michael Chen</div>
+                                <div class="professional-specialty">Psychiatry • Yesterday</div>
+                                <div class="professional-price">45 min • $126.00</div>
+                                <div class="professional-actions">
+                                    <button class="btn btn-outline btn-small">View Details</button>
+                                    <button class="btn btn-primary btn-small">Book Again</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Appointments Section -->
+                    <div id="appointments" class="dashboard-section">
+                        <h3>My Appointments</h3>
+                        <p>View and manage your upcoming and past appointments.</p>
+                        <!-- Appointment content would go here -->
+                    </div>
+                    
+                    <!-- Medical Records Section -->
+                    <div id="medical-records" class="dashboard-section">
+                        <h3>Medical Records</h3>
+                        <p>Access your consultation history, prescriptions, and medical documents.</p>
+                        <!-- Medical records content would go here -->
+                    </div>
+                    
+                    <!-- Payments Section -->
+                    <div id="payments" class="dashboard-section">
+                        <h3>Payment History</h3>
+                        <p>View your billing history and manage payment methods.</p>
+                        <!-- Payments content would go here -->
+                    </div>
+                    
+                    <!-- Settings Section -->
+                    <div id="settings" class="dashboard-section">
+                        <h3>Account Settings</h3>
+                        <p>Update your personal information, notification preferences, and privacy settings.</p>
+                        <!-- Settings content would go here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Book Consultation</h3>
+                <button class="close-modal" onclick="closeBookingModal()">&times;</button>
+            </div>
+            <form id="booking-form">
+                <div class="form-group">
+                    <label for="booking-professional">Professional</label>
+                    <input type="text" id="booking-professional" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="booking-date">Preferred Date</label>
+                    <input type="date" id="booking-date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-time">Preferred Time</label>
+                    <input type="time" id="booking-time" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-type">Consultation Type</label>
+                    <select id="booking-type" class="form-control" required>
+                        <option value="video">Video Call</option>
+                        <option value="voice">Voice Call</option>
+                        <option value="chat">Live Chat</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="booking-reason">Reason for Consultation</label>
+                    <textarea id="booking-reason" class="form-control" rows="3" placeholder="Briefly describe your symptoms or reason for consultation"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>MedHive</h3>
+                    <ul>
+                        <li><a href="#" onclick="showPage('home')">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>For Patients</h3>
+                    <ul>
+                        <li><a href="#" onclick="showPage('professionals')">Find a Professional</a></li>
+                        <li><a href="#" onclick="showPage('how-it-works')">How It Works</a></li>
+                        <li><a href="#" onclick="showPage('pricing')">Pricing</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>For Professionals</h3>
+                    <ul>
+                        <li><a href="#" onclick="showPage('signup-professional')">Join as Provider</a></li>
+                        <li><a href="#">Verification Process</a></li>
+                        <li><a href="#" onclick="showPage('dashboard')">Dashboard</a></li>
+                        <li><a href="#">Resources</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">HIPAA Compliance</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 MedHive. All rights reserved. | Secure Medical Consultations Platform
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Page Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Update active nav link if it exists for this page
+            const navLink = document.querySelector(`nav a[onclick="showPage('${pageId}')"]`);
+            if (navLink) {
+                navLink.classList.add('active');
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Dashboard Section Navigation
+        function showDashboardSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update sidebar
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+        }
+
+        // Professional Profiles Data
+        const professionals = [
+            {
+                id: 1,
+                name: "Dr. Sarah Johnson",
+                specialty: "Cardiologist • 12 years experience",
+                rating: 4.7,
+                reviews: 128,
+                price: 3.20,
+                about: "Dr. Sarah Johnson is a board-certified cardiologist with over 12 years of experience in treating cardiovascular diseases. She specializes in preventive cardiology and heart failure management.",
+                education: [
+                    "MD, Harvard Medical School",
+                    "Board Certified in Cardiology",
+                    "Fellow of the American College of Cardiology"
+                ]
+            },
+            {
+                id: 2,
+                name: "Dr. Michael Chen",
+                specialty: "Psychiatrist • 8 years experience",
+                rating: 5.0,
+                reviews: 94,
+                price: 2.80,
+                about: "Dr. Michael Chen is a psychiatrist specializing in anxiety disorders, depression, and cognitive behavioral therapy. He takes a holistic approach to mental health care.",
+                education: [
+                    "MD, Stanford University School of Medicine",
+                    "Board Certified in Psychiatry",
+                    "Certificate in Cognitive Behavioral Therapy"
+                ]
+            },
+            {
+                id: 3,
+                name: "Dr. Elena Rodriguez",
+                specialty: "Pediatrician • 15 years experience",
+                rating: 4.2,
+                reviews: 203,
+                price: 2.50,
+                about: "Dr. Elena Rodriguez is a pediatrician with extensive experience in child development, vaccination schedules, and common childhood illnesses.",
+                education: [
+                    "MD, Johns Hopkins University School of Medicine",
+                    "Board Certified in Pediatrics",
+                    "Fellow of the American Academy of Pediatrics"
+                ]
+            },
+            {
+                id: 4,
+                name: "Dr. James Wilson",
+                specialty: "Dermatologist • 10 years experience",
+                rating: 4.8,
+                reviews: 156,
+                price: 3.50,
+                about: "Dr. James Wilson specializes in medical and cosmetic dermatology, with expertise in skin cancer detection and treatment.",
+                education: [
+                    "MD, University of California, San Francisco",
+                    "Board Certified in Dermatology",
+                    "Mohs Surgery Fellowship"
+                ]
+            },
+            {
+                id: 5,
+                name: "Dr. Lisa Thompson",
+                specialty: "Neurologist • 14 years experience",
+                rating: 4.6,
+                reviews: 112,
+                price: 3.80,
+                about: "Dr. Lisa Thompson is a neurologist focusing on headache disorders, epilepsy, and neurodegenerative diseases.",
+                education: [
+                    "MD, Mayo Clinic Alix School of Medicine",
+                    "Board Certified in Neurology",
+                    "Fellow of the American Academy of Neurology"
+                ]
+            },
+            {
+                id: 6,
+                name: "Dr. Robert Kim",
+                specialty: "Orthopedic Surgeon • 18 years experience",
+                rating: 4.9,
+                reviews: 187,
+                price: 4.20,
+                about: "Dr. Robert Kim specializes in sports medicine and joint replacement surgeries, with a focus on minimally invasive techniques.",
+                education: [
+                    "MD, University of Pennsylvania Perelman School of Medicine",
+                    "Board Certified in Orthopedic Surgery",
+                    "Sports Medicine Fellowship"
+                ]
+            }
+        ];
+
+        // Show Professional Profile
+        function showProfessionalProfile(professionalId) {
+            const professional = professionals.find(p => p.id === professionalId);
+            if (professional) {
+                document.getElementById('profile-name').textContent = professional.name;
+                document.getElementById('profile-specialty').textContent = professional.specialty;
+                document.getElementById('profile-rating').textContent = `${professional.rating} (${professional.reviews} reviews)`;
+                document.getElementById('profile-price').textContent = `$${professional.price}/min`;
+                document.getElementById('profile-about').textContent = professional.about;
+                
+                const educationList = document.getElementById('profile-education');
+                educationList.innerHTML = '';
+                professional.education.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    educationList.appendChild(li);
+                });
+                
+                showPage('professional-profile');
+            }
+        }
+
+        // Populate Professionals Page
+        function populateProfessionalsPage() {
+            const professionalsGrid = document.querySelector('#professionals .professionals-grid');
+            professionalsGrid.innerHTML = '';
+            
+            professionals.forEach(professional => {
+                const card = document.createElement('div');
+                card.className = 'professional-card';
+                
+                // Generate star rating HTML
+                let starsHtml = '';
+                const fullStars = Math.floor(professional.rating);
+                const hasHalfStar = professional.rating % 1 !== 0;
+                
+                for (let i = 0; i < 5; i++) {
+                    if (i < fullStars) {
+                        starsHtml += '<i class="fas fa-star"></i>';
+                    } else if (i === fullStars && hasHalfStar) {
+                        starsHtml += '<i class="fas fa-star-half-alt"></i>';
+                    } else {
+                        starsHtml += '<i class="far fa-star"></i>';
+                    }
+                }
+                
+                card.innerHTML = `
+                    <div class="professional-image">
+                        <div class="verified-badge">
+                            <i class="fas fa-check-circle"></i> Verified
+                        </div>
+                    </div>
+                    <div class="professional-info">
+                        <div class="professional-name">${professional.name}</div>
+                        <div class="professional-specialty">${professional.specialty}</div>
+                        <div class="professional-rating">
+                            <div class="stars">
+                                ${starsHtml}
+                            </div>
+                            <span>${professional.rating} (${professional.reviews} reviews)</span>
+                        </div>
+                        <div class="professional-price">$${professional.price}/min</div>
+                        <div class="professional-actions">
+                            <button class="btn btn-primary btn-small" onclick="openBookingModal('${professional.name}')">Book Now</button>
+                            <button class="btn btn-outline btn-small" onclick="showProfessionalProfile(${professional.id})">View Profile</button>
+                        </div>
+                    </div>
+                `;
+                
+                professionalsGrid.appendChild(card);
+            });
+        }
+
+        // Booking Modal Functions
+        function openBookingModal(professionalName) {
+            document.getElementById('booking-professional').value = professionalName;
+            document.getElementById('booking-modal').classList.add('active');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('booking-modal').classList.remove('active');
+        }
+
+        // Billing Calculator Functionality
+        function setupBillingCalculator(baseId) {
+            const durationSlider = document.getElementById(`${baseId}-duration`);
+            const durationValue = document.getElementById(`${baseId}-duration-value`);
+            const calculatedCost = document.getElementById(`${baseId}-calculated-cost`);
+            
+            if (!durationSlider) return;
+            
+            // Update duration value display
+            durationSlider.addEventListener('input', function() {
+                durationValue.textContent = this.value + ' min';
+                calculateCost(baseId);
+            });
+            
+            // Recalculate when consultation type changes
+            document.getElementById(`${baseId}-consultation-type`).addEventListener('change', () => calculateCost(baseId));
+            document.getElementById(`${baseId}-professional-type`).addEventListener('change', () => calculateCost(baseId));
+            
+            function calculateCost(baseId) {
+                const duration = parseInt(document.getElementById(`${baseId}-duration`).value);
+                const consultationType = document.getElementById(`${baseId}-consultation-type`).value;
+                const professionalType = document.getElementById(`${baseId}-professional-type`).value;
+                
+                // Base rates (per minute)
+                let baseRate = 1.5; // Default base rate
+                
+                // Adjust based on consultation type
+                if (consultationType === 'video') baseRate = 1.8;
+                else if (consultationType === 'voice') baseRate = 1.5;
+                else if (consultationType === 'chat') baseRate = 1.2;
+                
+                // Adjust based on professional type
+                if (professionalType === 'specialist') baseRate *= 1.5;
+                else if (professionalType === 'expert') baseRate *= 2.0;
+                
+                const totalCost = (baseRate * duration).toFixed(2);
+                calculatedCost.textContent = '$' + totalCost;
+            }
+            
+            // Initialize calculator
+            calculateCost(baseId);
+        }
+
+        // Form Submission Handlers
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Login functionality would be implemented in a full application');
+            // In a real app, this would authenticate the user and redirect to dashboard
+            showPage('dashboard');
+        });
+
+        document.getElementById('signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Account created successfully!');
+            // In a real app, this would create the user account
+            showPage('dashboard');
+        });
+
+        document.getElementById('professional-signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Application submitted! Our team will review your credentials and contact you soon.');
+            showPage('home');
+        });
+
+        document.getElementById('booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Booking confirmed! You will receive a confirmation email shortly.');
+            closeBookingModal();
+        });
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Populate professionals page
+            populateProfessionalsPage();
+            
+            // Setup billing calculators
+            setupBillingCalculator('');
+            setupBillingCalculator('pricing');
+            
+            // Close modal when clicking outside
+            document.getElementById('booking-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeBookingModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
